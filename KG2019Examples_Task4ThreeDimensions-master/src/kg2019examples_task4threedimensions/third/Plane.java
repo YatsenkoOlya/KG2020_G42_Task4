@@ -41,4 +41,9 @@ public class Plane {
         this.c = c;
         this.d = d;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%1$.2fx + %2$.2fy + %3$.2fz + %4$.2f = 0 (%1$.2f %2$.2f %3$.2f %4$.2f)", a, b, c, d);
+    }
 }

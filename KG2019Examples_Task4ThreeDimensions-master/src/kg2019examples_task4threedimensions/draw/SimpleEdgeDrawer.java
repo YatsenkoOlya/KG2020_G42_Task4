@@ -44,7 +44,7 @@ public class SimpleEdgeDrawer extends ScreenGraphicsDrawer {
         }
         /*создаём хранилище этих точек в виде двух массивов*/
         ScreenCoordinates crds = new ScreenCoordinates(points);
-        /*если линия замкнута - рисем полиго, иначе - полилинию*/
+        /*если линия замкнута - рисуем полигон, иначе - полилинию*/
         if (polyline.isClosed())
             getGraphics().drawPolygon(crds.getXx(), crds.getYy(), crds.size());
         else
@@ -82,5 +82,4 @@ public class SimpleEdgeDrawer extends ScreenGraphicsDrawer {
             }
         };
     }
-    
 }

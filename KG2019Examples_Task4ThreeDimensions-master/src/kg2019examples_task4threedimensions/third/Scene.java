@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import kg2019examples_task4threedimensions.draw.IDrawer;
+import kg2019examples_task4threedimensions.draw.ShadowDrawer;
 import kg2019examples_task4threedimensions.math.Vector3;
 import models.Line3D;
 
@@ -25,7 +26,7 @@ public class Scene {
     public List<IModel> getModelsList() {
         return models;
     }
-    
+
     private int backgroundColor;
 
     /**
@@ -35,8 +36,8 @@ public class Scene {
     public Scene(int backgroundColorRGB) {
         this.backgroundColor = backgroundColorRGB;
         this.showAxes = false;
-
     }
+
     private boolean showAxes;
 
     public boolean isShowAxes() {
@@ -46,27 +47,27 @@ public class Scene {
     public void setShowAxes(boolean showAxis) {
         this.showAxes = showAxis;
     }
-    
+
     public void showAxes() {
         this.showAxes = true;
     }
-    
+
     public void hideAxes() {
         this.showAxes = false;
     }
-    
+
     private static final List<Line3D> axes = Arrays.asList(
             new Line3D(new Vector3(0, 0, 0), new Vector3(1, 0, 0)),
             new Line3D(new Vector3(0, 0, 0), new Vector3(0, 1, 0)),
             new Line3D(new Vector3(0, 0, 0), new Vector3(0, 0, 1))
     );
-    
+
     /**
      * Рисуем сцену со всеми моделями
      * @param drawer то, с помощью чего будем рисовать
      * @param cam камера для преобразования координат
      */
-    public void drawScene(IDrawer drawer, ICamera cam) {
+    public void drawShapes(IDrawer drawer, ICamera cam) {
         List<PolyLine3D> lines = new LinkedList<>();
         LinkedList<Collection<? extends IModel>> allModels = new LinkedList<>();
         allModels.add(models);
@@ -90,5 +91,28 @@ public class Scene {
         drawer.clear(backgroundColor);
         /*Рисуем все линии*/
         drawer.draw(lines);
+    }
+
+    public void drawShadows(ShadowDrawer shadowDrawer, ICamera cam, Vector3 light, Plane plane) {
+        List<PolyLine3D> lines = new LinkedList<>();
+        LinkedList<Collection<? extends IModel>> allModels = new LinkedList<>();
+        allModels.add(models);
+        /*перебираем все полилинии во всех моделях*/
+        for (Collection<? extends IModel> mc : allModels)
+            for (IModel m : mc) {
+                List<PolyLine3D> shadows = shadowDrawer.getShadows(m, plane, light);
+                for (PolyLine3D pl : shadows) {
+                    /*Все точки конвертируем с помощью камеры*/
+                    List<Vector3> points = new LinkedList<>();
+                    for (Vector3 v : pl.getPoints()) {
+                        points.add(cam.w2s(v));
+                    }
+                    /*Создаём на их сонове новые полилинии, но в том виде, в котором их видит камера*/
+                    lines.add(new PolyLine3D(points, pl.isClosed()));
+                }
+            }
+
+        /*Рисуем все линии*/
+        shadowDrawer.draw(lines);
     }
 }

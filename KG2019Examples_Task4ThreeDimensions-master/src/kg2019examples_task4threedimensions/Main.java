@@ -18,11 +18,11 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-       /* JFrame frame = new JFrame();
+        JFrame frame = new Frame();
         frame.setSize(600, 600);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.add(new DrawPanel());
-        frame.setVisible(true);*/
-        new Frame();
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 }

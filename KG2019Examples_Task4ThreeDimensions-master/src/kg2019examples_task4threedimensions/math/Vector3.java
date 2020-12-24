@@ -4,6 +4,10 @@
  */
 package kg2019examples_task4threedimensions.math;
 
+import java.util.Arrays;
+
+import static java.lang.Math.sqrt;
+
 /**
  * Класс, хранящий трёхмерный вектор / точку в трёхмерном пространстве.
  * @author Alexey
@@ -80,5 +84,16 @@ public class Vector3 {
             return 0;
         return (float)Math.sqrt(lenSqr);
     }
-    
+
+    public float getDistanceToAnotherPoint(Vector3 point) {
+        return (float) sqrt((getX() - point.getX()) * (getX() - point.getX()) +
+                (getY() - point.getY()) * (getY() - point.getY()) +
+                (getZ() - point.getZ()) * (getZ() - point.getZ()));
+    }
+
+    @Override
+    public String toString() {
+        return "values=" + Arrays.toString(values) +
+                '}';
+    }
 }
